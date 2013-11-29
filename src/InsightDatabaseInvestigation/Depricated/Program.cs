@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using Insight.Database;
+using InsightDatabaseInvestigation.Model;
 
-namespace InsightDatabaseInvestigation
+namespace InsightDatabaseInvestigation.Depricated
 {
     class Program
     {
-        static void Main()
+        public static void Main()
         {
             // recreate database and get connection
             var connection = DatabaseConfig.CreateConnectionAndInitDatabase();
@@ -119,47 +119,4 @@ namespace InsightDatabaseInvestigation
             return distinctUsers;
         }
     }
-
-    public class Membership
-    {
-        public int MembershipID { set; get; }
-        
-        public int GroupID { set; get; }
-        public int UserID { set; get; }
-
-        public User User { get; set; }
-        public UserGroup UserGroup { get; set; }
-    }
-
-    public class UserGroup
-    {
-        public UserGroup()
-        {
-            Users = new Collection<User>();
-        }
-
-        public int GroupID { set; get; }
-        public string Name { set; get; }
-        public string Comment { set; get; }
-
-        public virtual ICollection<User> Users { set; get; }
-    }
-
-    public class User
-    {
-        public User()
-        {
-            UserGroups = new Collection<UserGroup>();
-        }
-
-        public int UserID { set; get; }
-        public string FirstName { set; get; }
-        public string LastName { set; get; }
-        public string Email { set; get; }
-        public string Phone { set; get; }
-        public string Comment { set; get; }
-
-        public virtual ICollection<UserGroup> UserGroups { set; get; }
-    }
-
 }

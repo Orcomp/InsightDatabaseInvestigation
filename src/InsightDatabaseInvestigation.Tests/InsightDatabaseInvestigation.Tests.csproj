@@ -44,7 +44,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IntegrationTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InsightDatabaseInvestigation\InsightDatabaseInvestigation.csproj">
+      <Project>{56B3309F-B793-4A55-A795-088AAB98C485}</Project>
+      <Name>InsightDatabaseInvestigation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
