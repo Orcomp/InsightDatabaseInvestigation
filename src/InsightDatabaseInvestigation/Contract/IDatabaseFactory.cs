@@ -5,5 +5,6 @@
     public interface IDatabaseFactory
     {
         IDbConnection GetOpenConnection();
+        string GetConnectionString();
     }
 }

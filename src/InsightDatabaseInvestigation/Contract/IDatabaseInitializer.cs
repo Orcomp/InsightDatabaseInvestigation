@@ -2,7 +2,7 @@
 {
     public interface IDatabaseInitializer
     {
-        void Create();
+        void CreateOrUpdate();
         void Seed();
     }
 }

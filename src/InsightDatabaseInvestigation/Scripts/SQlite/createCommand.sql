@@ -5,7 +5,7 @@
     Comment varchar(1000)
 );
 
-CREATE TABLE [User]
+CREATE TABLE [Users]
 (
 	UserID INTEGER PRIMARY KEY AUTOINCREMENT,
 	FirstName varchar(100) not null,
@@ -22,5 +22,5 @@ CREATE TABLE Membership
 	GroupID integer not null,
 	UserID integer not null,
 	FOREIGN KEY(GroupID) references UserGroup(GroupID),
-	FOREIGN KEY(UserID) references [User](SomeID)
+	FOREIGN KEY(UserID) references [Users](SomeID)
 );

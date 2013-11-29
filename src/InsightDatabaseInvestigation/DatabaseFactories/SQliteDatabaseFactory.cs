@@ -9,7 +9,12 @@
     {
         public IDbConnection GetOpenConnection()
         {
-            return new SQLiteConnection(ConfigurationManager.ConnectionStrings["SQlite"].ToString());
+            return new SQLiteConnection(GetConnectionString());
+        }
+
+        public string GetConnectionString()
+        {
+            return ConfigurationManager.ConnectionStrings["SQlite"].ToString();
         }
     }
 }

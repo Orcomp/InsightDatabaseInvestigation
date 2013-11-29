@@ -1,4 +1,5 @@
 ﻿using InsightDatabaseInvestigation.DatabaseFactories;
+using InsightDatabaseInvestigation.Initializers;
 using InsightDatabaseInvestigation.Repositories;
 using NUnit.Framework;
 
@@ -12,7 +13,11 @@ namespace InsightDatabaseInvestigation.Tests
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            _sqlDatabaseFactory = new SqlDatabaseFactory();
+            _sqlDatabaseFactory =    new SqlDatabaseFactory();
+            var sqlDatabaseInitializer = new SqlDatabaseInitializer(_sqlDatabaseFactory);
+
+            sqlDatabaseInitializer.CreateOrUpdate();
+            sqlDatabaseInitializer.Seed();
         }
 
         [Test]

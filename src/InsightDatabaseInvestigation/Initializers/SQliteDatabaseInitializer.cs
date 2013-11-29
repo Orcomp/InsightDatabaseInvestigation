@@ -17,7 +17,7 @@
             _databaseFactory = databaseFactory;
         }
 
-        public void Create()
+        public void CreateOrUpdate()
         {
             // setup database tables
             var connection = _databaseFactory.GetOpenConnection();

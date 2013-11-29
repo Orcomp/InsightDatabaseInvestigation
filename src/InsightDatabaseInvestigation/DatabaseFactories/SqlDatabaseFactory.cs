@@ -9,7 +9,14 @@
     {
         public IDbConnection GetOpenConnection()
         {
-            return new SqlConnection(ConfigurationManager.ConnectionStrings["SQLExpress"].ToString());
+            var connection = new SqlConnection(GetConnectionString());
+            connection.Open();
+            return connection;
+        }
+
+        public string GetConnectionString()
+        {
+            return ConfigurationManager.ConnectionStrings["SQLExpress"].ToString();
         }
     }
 }
