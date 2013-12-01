@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace InsightDatabaseInvestigation.Tests
 {
+    using System.Linq;
+
     [TestFixture]
     public class IntegrationTest
     {
@@ -13,7 +15,7 @@ namespace InsightDatabaseInvestigation.Tests
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            _sqlDatabaseFactory =    new SqlDatabaseFactory();
+            _sqlDatabaseFactory = new SqlDatabaseFactory();
             var sqlDatabaseInitializer = new SqlDatabaseInitializer(_sqlDatabaseFactory);
 
             sqlDatabaseInitializer.CreateOrUpdate();
@@ -21,12 +23,24 @@ namespace InsightDatabaseInvestigation.Tests
         }
 
         [Test]
-        public void TestUserRepository()
+        public void TestModelRepository()
         {
-            var userRepository = new UserRepository(_sqlDatabaseFactory, new UserResultTransformer());
-            var users = userRepository.GetAllUsers();
+            var modelRepository = new ModelRepository(_sqlDatabaseFactory);
+            var model = modelRepository.GetModel();
 
-            Assert.IsNotEmpty(users);
+            Assert.IsNotNull(model);
+
+            Assert.True(model.UserGroups.Count == 4);
+            Assert.True(model.Users.Count == 5);
+
+            Assert.True(model.UserGroups.Single(x => x.Name == "Group1").Users.Count == 0);
+            Assert.True(model.UserGroups.Single(x => x.Name == "Group2").Users.Count == 5);
+            Assert.True(model.UserGroups.Single(x => x.Name == "Group3").Users.Count == 3);
+            Assert.True(model.UserGroups.Single(x => x.Name == "Group4").Users.Count == 2);
+
+            Assert.True(model.Users.All(x => x.UserGroups.Count == 2)); // All the users are in two user groups
+
+            Assert.IsNotNull(model);
         }
     }
 }

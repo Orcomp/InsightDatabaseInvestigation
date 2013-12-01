@@ -1,5 +1,5 @@
 ﻿	
-/****** Object:  StoredProcedure [dbo].[GetUsersGraph]    Script Date: 11/27/2013 21:57:53 ******/
+/****** Object:  StoredProcedure [dbo].[GetModel]    Script Date: 11/27/2013 21:57:53 ******/
 
 AUTOPROC All [UserGroup] Single=UserGroup Plural=UserGroups
 GO
@@ -13,7 +13,7 @@ GO
 -- Create date: 29-11-2013
 -- Description:	Gets all user, and related, info
 -- =============================================
-CREATE PROCEDURE [dbo].[GetUsersGraph]
+CREATE PROCEDURE [dbo].[GetModel]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -21,8 +21,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	Select * from [Users]
-	select * from Usergroup
-	select * from Membership
+	select * from [Usergroup]
+	select * from [Membership]
 END
 
 GO
@@ -46,20 +46,20 @@ BEGIN
 	select distinct [Users].*
 	from Membership
 		inner join UserGroup 
-			on Membership.GroupID = UserGroup.GroupID
+			on Membership.UserGroupID = UserGroup.UserGroupID
 		inner join [Users]
 			on [Users].UserID = Membership.UserID
-	where Membership.GroupID IN (Select mem.GroupID from Membership mem where mem.UserID = @userID)
+	where Membership.UserGroupID IN (Select mem.UserGroupID from Membership mem where mem.UserID = @userID)
 
 	select distinct UserGroup.*
 	from Membership
 		inner join UserGroup
-			on Membership.GroupID = UserGroup.GroupID
+			on Membership.UserGroupID = UserGroup.UserGroupID
 	where Membership.UserID = @userID
 
 	select *
 	from Membership
-	where Membership.GroupID IN (Select mem.GroupID from Membership mem where mem.UserID = @userID)
+	where Membership.UserGroupID IN (Select mem.UserGroupID from Membership mem where mem.UserID = @userID)
 END
 
 GO

@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Contract\IDatabaseFactory.cs" />
     <Compile Include="Contract\IDatabaseInitializer.cs" />
+    <Compile Include="Contract\IModelRepository.cs" />
     <Compile Include="Initializers\SqlDatabaseInitializer.cs" />
     <Compile Include="InsightExtensions.cs" />
     <Compile Include="Contract\IUserRepository.cs" />
@@ -90,10 +91,12 @@
     <Compile Include="DatabaseFactories\SqlDatabaseFactory.cs" />
     <Compile Include="DatabaseFactories\SQliteDatabaseFactory.cs" />
     <Compile Include="Initializers\SQliteDatabaseInitializer.cs" />
+    <Compile Include="Model\Model.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contract\ResultTransformer.cs" />
+    <Compile Include="Repositories\ModelRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\UserResultTransformer.cs" />
   </ItemGroup>

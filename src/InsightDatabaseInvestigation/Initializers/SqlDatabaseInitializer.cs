@@ -1,7 +1,9 @@
 ﻿namespace InsightDatabaseInvestigation.Initializers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Common;
+    using System.IO;
     using System.Linq;
     using Insight.Database.Schema;
     using Insight.Database;
@@ -22,10 +24,11 @@
 
         public void CreateOrUpdate()
         {
-            if (!SchemaInstaller.DatabaseExists(_databaseFactory.GetConnectionString()))
-            {
-                SchemaInstaller.CreateDatabase(_databaseFactory.GetConnectionString());
-            }
+            // We always want to start with a new copy
+            SchemaInstaller.DropDatabase(_databaseFactory.GetConnectionString());
+            SchemaInstaller.CreateDatabase(_databaseFactory.GetConnectionString());
+
+            // SchemaInstaller.DatabaseExists(_databaseFactory.GetConnectionString());
 
             var tablesSchema = new SchemaObjectCollection(CreateTablesCommandSql);
             var storedProcSchema = new SchemaObjectCollection(CreateStoredProcedures);
@@ -38,57 +41,42 @@
 
         public void Seed()
         {
-            var random = new Random();
+            var users = new List<User>
+                            {
+                                new User(){FirstName = "David", LastName = "Smith"},
+                                new User(){FirstName = "John", LastName = "Jones"},
+                                new User(){FirstName = "Marie", LastName = "Coles"},
+                                new User(){FirstName = "Anne", LastName = "Brown"},
+                                new User(){FirstName = "Bernard", LastName = "Green"},
+                            };
 
-            var users = Enumerable.Range(0, 100).Select(ix => new User()
-                {
-                    Comment = "Some comment and random text " + GetRandomString(), Email = "test@me.com", Middle = "V", FirstName = GetFirstName(), LastName = GetLastName(), Phone = GetPhoneNumber()
-                }).ToList();
-
-            var userGroups = Enumerable.Range(0, 5).Select(ix => new UserGroup()
-                {
-                    Comment = "Comment on group",
-                    Name = "Group " + ix
-                }).ToList();
+            var userGroups = new List<UserGroup>()
+                                 {
+                                     new UserGroup(){Name = "Group1"}, // As no users
+                                     new UserGroup(){Name = "Group2", Users = users}, // Has all the users
+                                     new UserGroup(){Name = "Group3", Users = new List<User>(){users[0], users[1], users[4]}}, // All the Men
+                                     new UserGroup(){Name = "Group4", Users = new List<User>(){users[2], users[3]}}, // All the women
+                                 };
 
             using (var openConnection = _databaseFactory.GetOpenConnection())
             {
                 openConnection.InsertList("InsertUsers", users);
                 openConnection.InsertList("InsertUserGroups", userGroups);
-                
-                var minUserId = users.Min(u => u.UserID);
-                var maxUserId = users.Max(u => u.UserID);
-                var minUserGroupId = userGroups.Min(u => u.GroupID);
-                var maxUserGroupId = userGroups.Max(u => u.GroupID);
 
-                var memberships = Enumerable.Range(0, 1000).Select(ix => new Membership()
+                // NOTE: After inserting the objects into the database, they will automagically be assigned the correct ID
+
+                var memberships = new List<Membership>();
+
+                foreach (var userGroup in userGroups)
                 {
-                    UserID = random.Next(minUserId, maxUserId),
-                    GroupID = random.Next(minUserGroupId, maxUserGroupId)
-                }).ToList();
+                    foreach (var user in userGroup.Users)
+                    {
+                        memberships.Add(new Membership(){UserID = user.UserID, UserGroupID = userGroup.UserGroupID});
+                    }
+                }
 
                 openConnection.InsertList("InsertMemberships", memberships);
             }
-        }
-
-        private string GetPhoneNumber()
-        {
-            return "0458797450";
-        }
-
-        private string GetLastName()
-        {
-            return "Last Name";
-        }
-
-        private string GetFirstName()
-        {
-            return "Pieter";
-        }
-
-        private string GetRandomString()
-        {
-            return "Random comment";
         }
     }
 }

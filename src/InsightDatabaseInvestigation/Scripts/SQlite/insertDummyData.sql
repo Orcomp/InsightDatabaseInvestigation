@@ -5,10 +5,10 @@
 [NEXT]
 
 INSERT INTO [Users] VALUES
-	(NULL, 'Pieter', 'Van Parys', 'V', 'me@provider.com', '045877896', 'None'),
-	(NULL, 'Lucas', 'Van Parys', 'V', 'lucas@provider.com', '045877896', 'None'),
-	(NULL, 'Louise', 'Van Parys', 'V', 'louise@provider.com', '045877896', 'None'),
-	(NULL, 'Annelies', 'Van Parys', 'V', 'annelies@provider.com', '045877896', 'None');
+	(NULL, 'Pieter', 'Van Parys'),
+	(NULL, 'Lucas', 'Van Parys'),
+	(NULL, 'Louise', 'Van Parys'),
+	(NULL, 'Annelies', 'Van Parys');
 	
 [NEXT]
 	
