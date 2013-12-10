@@ -65,7 +65,7 @@
                 {
                     UserID = random.Next(minUserId, maxUserId),
                     GroupID = random.Next(minUserGroupId, maxUserGroupId)
-                }).ToList();
+                }).Distinct(new UniqueMembershipEqualityProvider()).ToList();
 
                 openConnection.InsertList("InsertMemberships", memberships);
             }

@@ -1,32 +1,48 @@
-﻿using InsightDatabaseInvestigation.DatabaseFactories;
-using InsightDatabaseInvestigation.Initializers;
-using InsightDatabaseInvestigation.Repositories;
-using NUnit.Framework;
-
-namespace InsightDatabaseInvestigation.Tests
+﻿namespace InsightDatabaseInvestigation.Tests
 {
+    using System.Collections.Generic;
+    using InsightDatabaseInvestigation.Contract;
+    using InsightDatabaseInvestigation.DatabaseFactories;
+    using InsightDatabaseInvestigation.Initializers;
+    using InsightDatabaseInvestigation.Repositories;
+    using NUnit.Framework;
+
     [TestFixture]
     public class IntegrationTest
     {
         private SqlDatabaseFactory _sqlDatabaseFactory;
+        private SQliteDatabaseFactory _sQliteDatabaseFactory;
 
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            _sqlDatabaseFactory =    new SqlDatabaseFactory();
-            var sqlDatabaseInitializer = new SqlDatabaseInitializer(_sqlDatabaseFactory);
+            _sqlDatabaseFactory = new SqlDatabaseFactory();
+            _sQliteDatabaseFactory = new SQliteDatabaseFactory();
 
-            sqlDatabaseInitializer.CreateOrUpdate();
-            sqlDatabaseInitializer.Seed();
+            var sqlDatabaseInitializers = new IDatabaseInitializer[]
+                {
+                    new SqlDatabaseInitializer(_sqlDatabaseFactory),
+                    new SQliteDatabaseInitializer(_sQliteDatabaseFactory, true)
+                };
+
+            foreach (var databaseInitializer in sqlDatabaseInitializers)
+            {
+                databaseInitializer.CreateOrUpdate();
+                databaseInitializer.Seed();    
+            }
         }
 
         [Test]
-        public void TestUserRepository()
+        public void TestUserRepository([ValueSource("GetUserRepositories")]IUserRepository userRepository)
         {
-            var userRepository = new UserRepository(_sqlDatabaseFactory, new UserResultTransformer());
             var users = userRepository.GetAllUsers();
-
             Assert.IsNotEmpty(users);
+        }
+
+        public IEnumerable<IUserRepository> GetUserRepositories()
+        {
+            yield return new UserRepository(new SqlDatabaseFactory(), new UserResultTransformer());
+            yield return new SqliteUserRepository(new SQliteDatabaseFactory());
         }
     }
 }

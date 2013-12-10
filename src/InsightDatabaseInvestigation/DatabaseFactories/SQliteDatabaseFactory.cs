@@ -9,7 +9,9 @@
     {
         public IDbConnection GetOpenConnection()
         {
-            return new SQLiteConnection(GetConnectionString());
+            var sqLiteConnection = new SQLiteConnection(GetConnectionString());
+            sqLiteConnection.Open();
+            return sqLiteConnection;
         }
 
         public string GetConnectionString()
