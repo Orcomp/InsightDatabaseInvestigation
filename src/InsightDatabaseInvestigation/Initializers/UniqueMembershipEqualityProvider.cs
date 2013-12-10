@@ -7,12 +7,12 @@
     {
         public bool Equals(Membership x, Membership y)
         {
-            return x.GroupID == y.GroupID && x.UserID == y.UserID;
+            return x.UserGroupID == y.UserGroupID && x.UserID == y.UserID;
         }
 
         public int GetHashCode(Membership obj)
         {
-            return obj.GroupID.GetHashCode() + obj.UserID.GetHashCode();
+            return obj.UserGroupID.GetHashCode() + obj.UserID.GetHashCode();
         }
     }
 }

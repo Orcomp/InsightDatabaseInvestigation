@@ -19,7 +19,7 @@
 
         public IList<User> GetAllUsers()
         {
-            string commandText = @"GetUsersGraph";
+            string commandText = @"GetModel";
             var res = DatabaseFactory.GetOpenConnection().QueryResults<User, UserGroup, Membership>(commandText);
             return ResultTransformer.Flatten(res);
         }

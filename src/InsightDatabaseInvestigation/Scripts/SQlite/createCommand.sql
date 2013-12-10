@@ -1,6 +1,6 @@
 ﻿CREATE TABLE UserGroup
 (
-    GroupID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserGroupID INTEGER PRIMARY KEY AUTOINCREMENT,
     Name varchar(100) not null,
     Comment varchar(1000)
 );
@@ -9,18 +9,14 @@ CREATE TABLE [Users]
 (
 	UserID INTEGER PRIMARY KEY AUTOINCREMENT,
 	FirstName varchar(100) not null,
-	LastName varchar(100) not null,
-	Middle varchar(1) not null,
-	Email varchar(100) not null,
-	Phone varchar(16) not null,
-	Comment varchar(1000)
+	LastName varchar(100) not null
 );
 
 CREATE TABLE Membership
 (
 	MembershipID INTEGER PRIMARY KEY AUTOINCREMENT,
-	GroupID integer not null,
+	UserGroupID integer not null,
 	UserID integer not null,
-	FOREIGN KEY(GroupID) references UserGroup(GroupID),
+	FOREIGN KEY(UserGroupID) references UserGroup(UserGroupID),
 	FOREIGN KEY(UserID) references [Users](SomeID)
 );

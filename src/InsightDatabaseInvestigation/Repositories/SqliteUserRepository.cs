@@ -31,7 +31,7 @@
                 foreach (var membership in memberships)
                 {
                     membership.User = users.First(x => x.UserID == membership.UserID);
-                    membership.UserGroup = userGroups.First(x => x.GroupID == membership.GroupID);
+                    membership.UserGroup = userGroups.First(x => x.UserGroupID == membership.UserGroupID);
                     membership.UserGroup.Users.Add(membership.User);
                     membership.User.UserGroups.Add(membership.UserGroup);
                 }

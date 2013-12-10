@@ -6,10 +6,22 @@
     using InsightDatabaseInvestigation.Contract;
     using InsightDatabaseInvestigation.Model;
 
-    public class UserResultTransformer : ResultTransformer<User, Results<User, UserGroup, Membership>>
+    public class ModelRepository : IModelRepository
     {
-        private IList<User> Flatten(Results<User, UserGroup, Membership> result)
+        public ModelRepository(IDatabaseFactory databaseFactory)
         {
+            DatabaseFactory = databaseFactory;
+        }
+
+        public IDatabaseFactory DatabaseFactory { get; set; }
+
+        public Model GetModel()
+        {
+            string commandText = @"GetModel";
+            var result = DatabaseFactory.GetOpenConnection().QueryResults<User, UserGroup, Membership>(commandText);
+
+            var model = new Model();
+
             var users = result.Set1.ToDictionary(x => x.UserID, x => x);
             var userGroups = result.Set2.ToDictionary(x => x.UserGroupID, x => x);
 
@@ -25,18 +37,11 @@
                 }
             }
 
-            return result.Set1;
-        }
+            model.Users = result.Set1;
+            model.UserGroups = result.Set2;
+            model.Memberships = result.Set3;
 
-        public override IList<User> Flatten(Results<User> result)
-        {
-            if (result is Results<User, UserGroup, Membership>)
-            {
-                return Flatten(result as Results<User, UserGroup, Membership>);
-            }
-
-            // default
-            return result.Set1;
+            return model;
         }
     }
 }
