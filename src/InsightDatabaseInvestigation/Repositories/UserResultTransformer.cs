@@ -10,8 +10,8 @@
     {
         private IList<User> Flatten(Results<User, UserGroup, Membership> result)
         {
-            var users = result.Set1.ToDictionary(x => x.UserID, x => x);
-            var userGroups = result.Set2.ToDictionary(x => x.UserGroupID, x => x);
+            var users = result.Set1.ToDictionary(x => x.ID, x => x);
+            var userGroups = result.Set2.ToDictionary(x => x.ID, x => x);
 
             foreach (var membership in result.Set3)
             {

@@ -68,7 +68,7 @@
                 {
                     foreach (var user in userGroup.Users)
                     {
-                        memberships.Add(new Membership() { UserID = user.UserID, UserGroupID = userGroup.UserGroupID });
+                        memberships.Add(new Membership() { UserID = user.ID, UserGroupID = userGroup.ID });
                     }
                 }
 

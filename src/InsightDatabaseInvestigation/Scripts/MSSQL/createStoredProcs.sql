@@ -41,25 +41,25 @@ BEGIN
 
 	select  * 	
 	from [Users]
-	where UserID = @userID
+	where ID = @userID
 	UNION
 	select distinct [Users].*
 	from Membership
 		inner join UserGroup 
-			on Membership.UserGroupID = UserGroup.UserGroupID
+			on Membership.UserGroupID = UserGroup.ID
 		inner join [Users]
-			on [Users].UserID = Membership.UserID
-	where Membership.UserGroupID IN (Select mem.UserGroupID from Membership mem where mem.UserID = @userID)
+			on [Users].ID = Membership.ID
+	where Membership.ID IN (Select mem.ID from Membership mem where mem.ID = @userID)
 
 	select distinct UserGroup.*
 	from Membership
 		inner join UserGroup
-			on Membership.UserGroupID = UserGroup.UserGroupID
-	where Membership.UserID = @userID
+			on Membership.ID = UserGroup.ID
+	where Membership.ID = @userID
 
 	select *
 	from Membership
-	where Membership.UserGroupID IN (Select mem.UserGroupID from Membership mem where mem.UserID = @userID)
+	where Membership.ID IN (Select mem.ID from Membership mem where mem.ID = @userID)
 END
 
 GO

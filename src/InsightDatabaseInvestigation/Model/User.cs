@@ -11,7 +11,7 @@
             UserGroups = new Collection<UserGroup>();
         }
 
-        public int UserID { get; set; }
+        public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -19,7 +19,7 @@
 
         public override string ToString()
         {
-            return string.Format("UserID: {0}, FirstName: {1}, LastName: {2}, UserGroups: {3}", UserID, FirstName, LastName, string.Join(", ", UserGroups.Select(x => x.Name)));
+            return string.Format("UserID: {0}, FirstName: {1}, LastName: {2}, UserGroups: {3}", ID, FirstName, LastName, string.Join(", ", UserGroups.Select(x => x.Name)));
         }
     }
 }

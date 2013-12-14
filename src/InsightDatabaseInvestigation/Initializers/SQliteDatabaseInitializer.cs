@@ -1,14 +1,19 @@
 ﻿namespace InsightDatabaseInvestigation.Initializers
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.IO;
     using System.Data.SQLite;
+    using System.Linq;
+
+    using Insight.Database;
+
     using InsightDatabaseInvestigation.Contract;
+    using InsightDatabaseInvestigation.Model;
 
     public class SQliteDatabaseInitializer : IDatabaseInitializer
     {
-        private const string InsertDummyDataSql = @".\Scripts\SQlite\insertDummyData.sql";
         private const string CreateTablesCommandSql = @".\Scripts\SQlite\createCommand.sql";
         private readonly IDatabaseFactory _databaseFactory;
         
@@ -50,24 +55,51 @@
 
         public void Seed()
         {
-            // setup database tables
-            var connection = _databaseFactory.GetOpenConnection();
-            var dbCommand = connection.CreateCommand();
-
-            // split on [NEXT] as we cannot execute multiple commands
-            var commands = File.ReadAllText(InsertDummyDataSql).Split(new[] { "[NEXT]" }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string command in commands)
-            {
-                dbCommand.CommandText = command;
-
-                if (connection.State != ConnectionState.Open)
+            var users = new List<User>
                 {
-                    connection.Open();
+                    new User() { FirstName = "David", LastName = "Smith" },
+                    new User() { FirstName = "John", LastName = "Jones" },
+                    new User() { FirstName = "Marie", LastName = "Coles" },
+                    new User() { FirstName = "Anne", LastName = "Brown" },
+                    new User() { FirstName = "Bernard", LastName = "Green" },
+                };
+
+            var userGroups = new List<UserGroup>()
+                {
+                    new UserGroup() { Name = "Group1" }, // As no users
+                    new UserGroup() { Name = "Group2", Users = users }, // Has all the users
+                    new UserGroup() { Name = "Group3", Users = new List<User>() { users[0], users[1], users[4] } }, // All the Men
+                    new UserGroup() { Name = "Group4", Users = new List<User>() { users[2], users[3] } }, // All the women
+                };
+
+            using (var openConnection = _databaseFactory.GetOpenConnection())
+            {
+                foreach (var user in users)
+                {
+                    openConnection.InsertSql("INSERT INTO Users (FirstName, LastName) values (@FirstName, @LastName); SELECT ROWID FROM Users order by ROWID DESC limit 1",user);
                 }
 
-                dbCommand.ExecuteNonQuery();
-            }   
+                foreach (var userGroup in userGroups)
+                {
+                    openConnection.InsertSql("INSERT INTO UserGroup (Name) values (@Name); SELECT ROWID FROM UserGroup order by ROWID DESC limit 1", userGroup);
+                }
+
+                // NOTE: After inserting the objects into the database, they will automagically be assigned the correct ID
+                var memberships = new List<Membership>();
+
+                foreach (var userGroup in userGroups)
+                {
+                    foreach (var user in userGroup.Users)
+                    {
+                        memberships.Add(new Membership() { UserID = user.ID, UserGroupID = userGroup.ID });
+                    }
+                }
+
+                foreach (var membership in memberships)
+                {
+                    openConnection.InsertSql("INSERT INTO Membership (UserGroupID , UserID) values (@UserGroupID, @UserID); SELECT ROWID FROM Membership order by ROWID DESC limit 1", membership);
+                }
+            }
         }
     }
 }

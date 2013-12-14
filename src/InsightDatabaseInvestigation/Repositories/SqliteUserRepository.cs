@@ -30,8 +30,8 @@
 
                 foreach (var membership in memberships)
                 {
-                    membership.User = users.First(x => x.UserID == membership.UserID);
-                    membership.UserGroup = userGroups.First(x => x.UserGroupID == membership.UserGroupID);
+                    membership.User = users.First(x => x.ID == membership.UserID);
+                    membership.UserGroup = userGroups.First(x => x.ID == membership.UserGroupID);
                     membership.UserGroup.Users.Add(membership.User);
                     membership.User.UserGroups.Add(membership.UserGroup);
                 }
