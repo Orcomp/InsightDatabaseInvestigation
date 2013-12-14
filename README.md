@@ -19,35 +19,35 @@ Just 3 tables:
 - Membership
 
 
-		CREATE TABLE [UserGroup]
+		CREATE TABLE [UserGroups]
 		(
-			UserGroupID int identity,
+			ID int identity,
 			Name varchar(100) not null
 		)
 		GO
-		ALTER TABLE [UserGroup] ADD CONSTRAINT PK_UserGroup PRIMARY KEY (UserGroupID)
+		ALTER TABLE [UserGroups] ADD CONSTRAINT PK_UserGroup PRIMARY KEY (ID)
 		GO
 		CREATE TABLE [Users]
 		(
-			UserID int identity,
+			ID int identity,
 			FirstName varchar(100) not null,
 			LastName varchar(100) not null
 		)
 		GO
-		ALTER TABLE [Users] ADD CONSTRAINT PK_User PRIMARY KEY (UserID)
+		ALTER TABLE [Users] ADD CONSTRAINT PK_User PRIMARY KEY (ID)
 		GO
-		CREATE TABLE [Membership]
+		CREATE TABLE [Memberships]
 		(
-			MembershipID int identity,
+			ID int identity,
 			UserGroupID int not null,
 			UserID int not null
 		)
 		GO
-		ALTER TABLE [Membership] ADD CONSTRAINT PK_Membership PRIMARY KEY (MembershipID)
+		ALTER TABLE [Memberships] ADD CONSTRAINT PK_Membership PRIMARY KEY (ID)
 		GO
-		ALTER TABLE [Membership] ADD CONSTRAINT FK_User FOREIGN KEY (UserID) REFERENCES [Users](UserID)
+		ALTER TABLE [Memberships] ADD CONSTRAINT FK_User FOREIGN KEY (UserID) REFERENCES [Users](ID)
 		GO
-		ALTER TABLE [Membership] ADD CONSTRAINT FK_UserGroup FOREIGN KEY (UserGroupID) REFERENCES [UserGroup](UserGroupID)
+		ALTER TABLE [Memberships] ADD CONSTRAINT FK_UserGroup FOREIGN KEY (UserGroupID) REFERENCES [UserGroups](ID)
 		GO
 
 # Features Discovered
@@ -67,5 +67,6 @@ Just 3 tables:
 
 # SQLite
 
-Download ODBC Driver here:
-http://www.ch-werner.de/sqliteodbc/sqliteodbc.exe
+Works fine with System.Data.SQLite. (NOTE: Need to be careful as SQLite does not have stored procedures.)
+
+There is no need to use the ODBC connection.

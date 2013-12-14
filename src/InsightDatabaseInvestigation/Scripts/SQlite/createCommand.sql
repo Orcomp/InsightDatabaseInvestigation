@@ -1,4 +1,4 @@
-﻿CREATE TABLE UserGroup
+﻿CREATE TABLE UserGroups
 (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     Name varchar(100) not null
@@ -11,11 +11,11 @@ CREATE TABLE [Users]
 	LastName varchar(100) not null
 );
 
-CREATE TABLE Membership
+CREATE TABLE Memberships
 (
 	ID INTEGER PRIMARY KEY AUTOINCREMENT,
 	UserGroupID integer not null,
 	UserID integer not null,
-	FOREIGN KEY(UserGroupID) references UserGroup(ID),
+	FOREIGN KEY(UserGroupID) references UserGroups(ID),
 	FOREIGN KEY(UserID) references [Users](ID)
 );

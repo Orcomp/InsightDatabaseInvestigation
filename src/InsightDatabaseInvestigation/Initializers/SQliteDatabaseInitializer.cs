@@ -81,7 +81,7 @@
 
                 foreach (var userGroup in userGroups)
                 {
-                    openConnection.InsertSql("INSERT INTO UserGroup (Name) values (@Name); SELECT ROWID FROM UserGroup order by ROWID DESC limit 1", userGroup);
+                    openConnection.InsertSql("INSERT INTO UserGroups (Name) values (@Name); SELECT ROWID FROM UserGroups order by ROWID DESC limit 1", userGroup);
                 }
 
                 // NOTE: After inserting the objects into the database, they will automagically be assigned the correct ID
@@ -97,7 +97,7 @@
 
                 foreach (var membership in memberships)
                 {
-                    openConnection.InsertSql("INSERT INTO Membership (UserGroupID , UserID) values (@UserGroupID, @UserID); SELECT ROWID FROM Membership order by ROWID DESC limit 1", membership);
+                    openConnection.InsertSql("INSERT INTO Memberships (UserGroupID , UserID) values (@UserGroupID, @UserID); SELECT ROWID FROM Memberships order by ROWID DESC limit 1", membership);
                 }
             }
         }

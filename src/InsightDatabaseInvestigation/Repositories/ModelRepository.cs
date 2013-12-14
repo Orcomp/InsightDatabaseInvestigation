@@ -52,8 +52,8 @@
         public Model GetSQLiteModel()
         {
             var dbUsers = DatabaseFactory.GetOpenConnection().QuerySql<User>("SELECT * FROM Users");
-            var dbUserGroups = DatabaseFactory.GetOpenConnection().QuerySql<UserGroup>("SELECT * FROM UserGroup");
-            var dbMemberships = DatabaseFactory.GetOpenConnection().QuerySql<Membership>("SELECT * FROM Membership");
+            var dbUserGroups = DatabaseFactory.GetOpenConnection().QuerySql<UserGroup>("SELECT * FROM UserGroups");
+            var dbMemberships = DatabaseFactory.GetOpenConnection().QuerySql<Membership>("SELECT * FROM Memberships");
 
             var model = new Model();
 

@@ -18,25 +18,10 @@
 
         public IList<User> GetAllUsers()
         {
-            using (var connection = DatabaseFactory.GetOpenConnection())
-            {
-                var userQuery = "Select * from [Users]";
-                var userGroupQuery = "Select * from [UserGroup]";
-                var membershipQuery = "Select * from [Membership]";
+            var modelRepository = new ModelRepository(DatabaseFactory);
+            var model = modelRepository.GetSQLiteModel();
 
-                var users = connection.Query<User>(userQuery, commandType: CommandType.Text);
-                var userGroups = connection.Query<UserGroup>(userGroupQuery, commandType: CommandType.Text);
-                var memberships = connection.Query<Membership>(membershipQuery, commandType: CommandType.Text);
-
-                foreach (var membership in memberships)
-                {
-                    membership.User = users.First(x => x.ID == membership.UserID);
-                    membership.UserGroup = userGroups.First(x => x.ID == membership.UserGroupID);
-                    membership.UserGroup.Users.Add(membership.User);
-                    membership.User.UserGroups.Add(membership.UserGroup);
-                }
-                return users;
-            }
+            return model.Users;
         }
 
         public User GetUserById(int id)

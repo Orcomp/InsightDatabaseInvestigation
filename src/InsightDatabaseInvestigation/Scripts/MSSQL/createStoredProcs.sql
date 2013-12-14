@@ -1,11 +1,11 @@
 ﻿	
 /****** Object:  StoredProcedure [dbo].[GetModel]    Script Date: 11/27/2013 21:57:53 ******/
 
-AUTOPROC All [UserGroup] Single=UserGroup Plural=UserGroups
+AUTOPROC All [UserGroups] Single=UserGroup Plural=UserGroups
 GO
 AUTOPROC All [Users] Single=User Plural=Users
 GO
-AUTOPROC All [Membership] Single=Membership Plural=Memberships
+AUTOPROC All [Memberships] Single=Membership Plural=Memberships
 GO
 
 -- =============================================
@@ -21,8 +21,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	Select * from [Users]
-	select * from [Usergroup]
-	select * from [Membership]
+	select * from [Usergroups]
+	select * from [Memberships]
 END
 
 GO
@@ -44,22 +44,22 @@ BEGIN
 	where ID = @userID
 	UNION
 	select distinct [Users].*
-	from Membership
-		inner join UserGroup 
-			on Membership.UserGroupID = UserGroup.ID
+	from Memberships
+		inner join UserGroups
+			on Memberships.UserGroupID = UserGroups.ID
 		inner join [Users]
-			on [Users].ID = Membership.ID
-	where Membership.ID IN (Select mem.ID from Membership mem where mem.ID = @userID)
+			on [Users].ID = Memberships.ID
+	where Memberships.ID IN (Select mem.ID from Memberships mem where mem.ID = @userID)
 
-	select distinct UserGroup.*
-	from Membership
-		inner join UserGroup
-			on Membership.ID = UserGroup.ID
-	where Membership.ID = @userID
+	select distinct UserGroups.*
+	from Memberships
+		inner join UserGroups
+			on Memberships.ID = UserGroups.ID
+	where Memberships.ID = @userID
 
 	select *
-	from Membership
-	where Membership.ID IN (Select mem.ID from Membership mem where mem.ID = @userID)
+	from Memberships
+	where Memberships.ID IN (Select mem.ID from Memberships mem where mem.ID = @userID)
 END
 
 GO
@@ -77,8 +77,8 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	Select * from [Users]
-	select * from Usergroup
-	select * from Membership
+	select * from Usergroups
+	select * from Memberships
 	
 END
 
